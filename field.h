@@ -26,8 +26,6 @@ protected:
     QPixmap *pm;
 
     QString playerName;
-    bool editingMode;   // режим редактирования клеток
-
     int x;  // ширина поля
     int y;  // высота поля
     int zero_x; //  НУЛЕВЫЕ ТОЧКИ,
@@ -37,10 +35,9 @@ protected:
 
     int count;  // колличество расставленных клеток на поле
     void mousePressEvent(QMouseEvent *event);
+//    void enterEvent(QEvent *event);
     virtual void drawField();
     virtual void drawCell(int x, int y, CELLS cellType = CL_CELL);
-    virtual void drawNonActiveField();   // для нарисовки неактивного поля(понадобится в начале игры)
-    void drawCellFromIndexes();
     void clean();
 
 
@@ -53,10 +50,7 @@ signals:
 
 
 public slots:
-    virtual void endEditing();  // слот для отключения режима редактирования клеток
     void setName(const QString &name);  // слот для задания имени игрока
-    virtual void startEditing();    // разрешать редактирование своих ячеек
-    void drawPlayField();   // рисует поле с кораблями/попаданиями и прочие мимо
 //    void starting();    // первоначальная настройка полей для игры после расстановки
     void getField();
 };

@@ -52,16 +52,17 @@ void Field::drawField()
 
 void Field::mousePressEvent(QMouseEvent *event)
 {
+    setMouseTracking(true);
     if (event->button() == Qt::LeftButton)
     {
 //        if (editingMode == true)
-//            drawCell(event->x(), event->y(), CL_CELL);
+            drawCell(event->x(), event->y(), CL_CELL);
 //        else
 //            QMessageBox::information(this, "", "Поле закрыто");
     }
     if (event->button() == Qt::RightButton)
 //        if (editingMode == true)
-//            drawCell(event->x(), event->y(), CL_EMPTY);
+            drawCell(event->x(), event->y(), CL_EMPTY);
     emit sendMouseCoord(event->x(), event->y());
 }
 
@@ -84,8 +85,6 @@ void Field::drawCell(int x, int y/*, CELLS cellType = CL_CELL*/, CELLS cellType)
         c_y = -1;
         return;
     }
-
-//    QMessageBox::information(this, "cell",QString::number(c_x)+" - "+QString::number(c_y));
     try
     {
         if (cellType == CL_EMPTY)   //  0
@@ -164,8 +163,6 @@ QString Field::debugGetField()
     return temp;
 }
 
-void Field::startEditing() {}
-
 void Field::getField()
 {
     QString temp;
@@ -178,6 +175,5 @@ void Field::getField()
         temp.append("\n");
     }
     QMessageBox::information(this, "debug", temp);
-    drawCellFromIndexes();
 }
 

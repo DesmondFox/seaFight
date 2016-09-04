@@ -37,11 +37,6 @@ Window::Window(QWidget *parent) : QWidget(parent)
     connect(My, SIGNAL(sendCountCells(int)), this, SLOT(setMyCountOfCells(int)));
     connect(Enemy, SIGNAL(sendCountCells(int)), this, SLOT(setEnemyCountOfCells(int)));
     // отключение редактирования
-    connect(lblMyCount, SIGNAL(clicked(bool)), My, SLOT(endEditing()));
-    connect(lblEnemyCount, SIGNAL(clicked(bool)), Enemy, SLOT(endEditing()));
-
-    connect(My, SIGNAL(startEditingForEnemy()), Enemy, SLOT(startEditing()));
-    connect(Enemy, SIGNAL(startingGame()), My, SLOT(drawPlayField()));
 
     connect(debEn, SIGNAL(clicked(bool)), Enemy, SLOT(getField()));
     connect(debMy, SIGNAL(clicked(bool)), My, SLOT(getField()));
