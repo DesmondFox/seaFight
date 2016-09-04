@@ -139,15 +139,6 @@ void Field::drawCell(int x, int y/*, CELLS cellType = CL_CELL*/, CELLS cellType)
     update();
 }
 
-void Field::endEditing()
-{
-    editingMode = false;
-    clean();
-    drawNonActiveField();
-//    QMessageBox::information(this, "debug", debugGetField());
-    emit startEditingForEnemy();
-}
-
 void Field::clean()
 {
     pm->fill();
@@ -173,12 +164,6 @@ QString Field::debugGetField()
     return temp;
 }
 
-void Field::drawNonActiveField()
-{
-    pm->fill(Qt::lightGray);
-    drawField();
-}
-
 void Field::startEditing() {}
 
 void Field::getField()
@@ -196,26 +181,3 @@ void Field::getField()
     drawCellFromIndexes();
 }
 
-void Field::drawCellFromIndexes()
-{
-    clean();
-//    drawField();
-    QPainter pntr(pm);
-    int x, y;
-    for (int i = 0; i < 10; i++)
-    {
-        for (int j = 0; j < 10; j++)
-        {
-            x = j*cell + zero_x*2;
-            y = i*cell + zero_y*2;
-            if (FIELD[i][j] == 1)
-            {
-                qDebug() << QString::number(FIELD[i][j]);
-                pntr.setBrush(QBrush(QColor(255, 0, 0, 140)));  // м.б. позже убрать альфу
-                pntr.setPen(QPen(QColor(255, 0, 0, 140)));
-                pntr.drawRect(QRect(x*cell+1, y*cell+1, cell-2, cell-2));
-                update();
-            }
-        }
-    }
-}
