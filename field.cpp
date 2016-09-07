@@ -63,16 +63,6 @@ void Field::drawField()
 
 void Field::mousePressEvent(QMouseEvent *event)
 {
-//    if (event->button() == Qt::LeftButton)
-//    {
-////        if (editingMode == true)
-//            drawCell(event->x(), event->y(), CL_CELL);
-////        else
-////            QMessageBox::information(this, "", "Поле закрыто");
-//    }
-//    if (event->button() == Qt::RightButton)
-////        if (editingMode == true)
-//            drawCell(event->x(), event->y(), CL_EMPTY);
 
     emit sendMouseCoord(event->x(), event->y());
 }
@@ -107,28 +97,29 @@ void Field::mouseMoveEvent(QMouseEvent *event)
         c_y = -1;
     }
 
-
-
     update();
-//    qDebug() << c_x << ", " << c_y;
 }
 
 bool Field::drawGhostCell(int cellx, int celly, SHIPS ship, POSITION pos, QColor color)
 {
     QPainter p(pm);
-    bool beyondBorders = false;
-
 
     p.setBrush(QBrush(color));
     p.setPen(QPen(color));
     // Рисование клеток
     // Очень плохой код, очень. Серьёзно
     // Какой-то индусский код тут
+
+    // Тут даже однопалубный корабль бывает горизонтальным и вертикальным
+    // Это странно, но работает. Иначе бы пришлось это всё выносить. Мб позже и вынесу отдельно, если надо будет.
     if (pos == HORIZONTAL)
     {
         if (ship == SL_1)
         {
             p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+            // И да, мы закидываем в метод drawGhostCell индексы клеток. т. е нумерация идет от 1 до 10.
+            // А вот для массива, как известно, идет нумерация с 0 до 9 и по этому надо
+            // минусовать единицу с проверки массива, ибо будет сдвиг (долго с этим возился)
             if ((FIELD[celly-1][cellx-1] != 0))
                 return false;
         }
@@ -148,6 +139,9 @@ bool Field::drawGhostCell(int cellx, int celly, SHIPS ship, POSITION pos, QColor
             p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
             p.drawRect(QRect(cellx*cell+cell+1, celly*cell+1, cell-2, cell-2));
             p.drawRect(QRect(cellx*cell+cell+cell+1, celly*cell+1, cell-2, cell-2));
+
+            // Сам по себе этот момент некорректен, надо будет позже как-то сделать так,
+            // чтобы это всё входило в одно условие. И так в каждом
             if ((FIELD[celly-1][cellx-1] != 0) || ((cellx + 2) > 10))
                 return false;
             if (FIELD[celly-1][cellx-1+1] != 0)
@@ -227,6 +221,8 @@ bool Field::drawGhostCell(int cellx, int celly, SHIPS ship, POSITION pos, QColor
 
 void Field::drawOneCell(int cellx, int celly, CELLS cellType)
 {
+    // Да, я сделал отдельный метод для рисовки ОДНОЙ клетки.
+    // так будет лучше, имхо.
     QPainter pn(pm);
     if (cellType == CL_CELL)
     {
@@ -234,6 +230,8 @@ void Field::drawOneCell(int cellx, int celly, CELLS cellType)
         pn.setPen(QPen(Qt::black));
         pn.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
     }
+
+    /// TODO: Дописать условия для остальных типок клеток
     update();
 }
 
@@ -250,6 +248,10 @@ void Field::drawCellField()
 
 }
 
+// Скорее всего этот метод я удалю. Не нужен он. Рисовкой будет заниматься отдельный метод,
+// который будет ставить корабли целиком, а не по одному.
+
+/// TODO: Удалить метод. Создать метод для рисовки целого корабля, а не поклеточно
 void Field::drawCell(int x, int y/*, CELLS cellType = CL_CELL*/, CELLS cellType)
 {
     // индексы для массива клеток
