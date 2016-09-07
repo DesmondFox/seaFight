@@ -12,7 +12,6 @@ MyField::MyField(int hX, int hY)
     drawField();
     playerName = "Игрок 1";
 
-
 }
 
 //void MyField::startEditing()

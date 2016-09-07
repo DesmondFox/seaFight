@@ -10,6 +10,17 @@ Field::Field(QWidget *parent) : QWidget(parent)
     for (int i = 0; i < 10; i++)
         for (int j = 0; j < 10; j++)
             FIELD[i][j] = 0;
+
+    // теперь отслеживается перемещение мыши по полю
+    this->setMouseTracking(true);
+
+    currentx = currenty = -1;
+
+    /// TEMP
+    setCellsMode = true;
+    FIELD[5][5] = 1;
+    FIELD[5][6] = 1;
+    FIELD[0][0] = 1;
 }
 
 void Field::paintEvent(QPaintEvent *event)
@@ -52,18 +63,191 @@ void Field::drawField()
 
 void Field::mousePressEvent(QMouseEvent *event)
 {
-    setMouseTracking(true);
-    if (event->button() == Qt::LeftButton)
-    {
-//        if (editingMode == true)
-            drawCell(event->x(), event->y(), CL_CELL);
-//        else
-//            QMessageBox::information(this, "", "Поле закрыто");
-    }
-    if (event->button() == Qt::RightButton)
-//        if (editingMode == true)
-            drawCell(event->x(), event->y(), CL_EMPTY);
+//    if (event->button() == Qt::LeftButton)
+//    {
+////        if (editingMode == true)
+//            drawCell(event->x(), event->y(), CL_CELL);
+////        else
+////            QMessageBox::information(this, "", "Поле закрыто");
+//    }
+//    if (event->button() == Qt::RightButton)
+////        if (editingMode == true)
+//            drawCell(event->x(), event->y(), CL_EMPTY);
+
     emit sendMouseCoord(event->x(), event->y());
+}
+
+void Field::mouseMoveEvent(QMouseEvent *event)
+{
+
+    int c_x, c_y;
+
+
+    if ((event->x() > cell+zero_x) && (event->y() > cell+zero_y))
+    {
+
+        // находим индексы для массива
+        c_x = (event->x() - cell - zero_x) / cell + 1;
+        c_y = (event->y() - cell - zero_y) / cell + 1;
+        if ((c_x == currentx) && (c_y == currenty))
+        {
+
+        }
+        else
+        {
+            clean();
+            drawField();
+            drawCellField();
+            qDebug() << drawGhostCell(c_x, c_y, SL_4, VERTICAL);
+        }
+    }
+    else
+    {
+        c_x = -1;
+        c_y = -1;
+    }
+
+
+
+    update();
+//    qDebug() << c_x << ", " << c_y;
+}
+
+bool Field::drawGhostCell(int cellx, int celly, SHIPS ship, POSITION pos, QColor color)
+{
+    QPainter p(pm);
+    bool beyondBorders = false;
+
+
+    p.setBrush(QBrush(color));
+    p.setPen(QPen(color));
+    // Рисование клеток
+    // Очень плохой код, очень. Серьёзно
+    // Какой-то индусский код тут
+    if (pos == HORIZONTAL)
+    {
+        if (ship == SL_1)
+        {
+            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+            if ((FIELD[celly-1][cellx-1] != 0))
+                return false;
+        }
+        if (ship == SL_2)
+        {
+            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+cell+1, celly*cell+1, cell-2, cell-2));
+            if ((FIELD[celly-1][cellx-1] != 0) || ((cellx + 1) > 10))
+                return false;
+            if ((FIELD[celly-1][cellx-1+1] != 0))
+                return false;
+
+            return true;
+        }
+        if (ship == SL_3)
+        {
+            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+cell+cell+1, celly*cell+1, cell-2, cell-2));
+            if ((FIELD[celly-1][cellx-1] != 0) || ((cellx + 2) > 10))
+                return false;
+            if (FIELD[celly-1][cellx-1+1] != 0)
+                return false;
+            if (FIELD[celly-1][cellx-1+2] != 0)
+                return false;
+            return true;
+        }
+        if (ship == SL_4)
+        {
+            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+cell+cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+cell+cell+cell+1, celly*cell+1, cell-2, cell-2));
+            if ((FIELD[celly-1][cellx-1] != 0) || ((cellx + 3) > 10))
+                return false;
+
+            if (FIELD[celly-1][cellx-1+1] != 0)
+                return false;
+            if (FIELD[celly-1][cellx-1+2] != 0)
+                return false;
+            if (FIELD[celly-1][cellx-1+3] != 0)
+                return false;
+            return true;
+        }
+    }
+    if (pos == VERTICAL)
+    {
+        if (ship == SL_1)
+        {
+            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+            if ((FIELD[celly-1][cellx-1] != 0))
+                return false;
+        }
+        if (ship == SL_2)
+        {
+            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+1, celly*cell+cell+1, cell-2, cell-2));
+            if ((FIELD[celly-1][cellx-1] != 0) || ((celly + 1) > 10))
+                return false;
+            if (FIELD[celly-1+1][cellx-1] != 0)
+                return false;
+            return true;
+
+        }
+        if (ship == SL_3)
+        {
+            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+1, celly*cell+cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+1, celly*cell+cell+cell+1, cell-2, cell-2));
+            if ((FIELD[celly-1][cellx-1] != 0) || ((celly + 2) > 10))
+                return false;
+            if (FIELD[celly-1+1][cellx-1] != 0)
+                return false;
+            if (FIELD[celly-1+2][cellx-1] != 0)
+                return false;
+            return true;
+        }
+        if (ship == SL_4)
+        {
+            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+1, celly*cell+cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+1, celly*cell+cell+cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+1, celly*cell+cell+cell+cell+1, cell-2, cell-2));
+            if ((FIELD[celly-1][cellx-1] != 0) || ((celly + 3) > 10))
+                return false;
+            if (FIELD[celly-1+1][cellx-1] != 0)
+                return false;
+            if (FIELD[celly-1+2][cellx-1] != 0)
+                return false;
+            if (FIELD[celly-1+3][cellx-1] != 0)
+                return false;
+            return true;
+        }
+    }
+}
+
+void Field::drawOneCell(int cellx, int celly, CELLS cellType)
+{
+    QPainter pn(pm);
+    if (cellType == CL_CELL)
+    {
+        pn.setBrush(Qt::black);
+        pn.setPen(QPen(Qt::black));
+        pn.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+    }
+    update();
+}
+
+void Field::drawCellField()
+{
+    for (int i = 0; i < 10; i++)
+    {
+        for (int j = 0; j < 10; j++)
+        {
+            if (FIELD[j][i] == 1)
+                drawOneCell(i+1, j+1);
+        }
+    }
+
 }
 
 void Field::drawCell(int x, int y/*, CELLS cellType = CL_CELL*/, CELLS cellType)
