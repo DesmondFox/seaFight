@@ -17,17 +17,26 @@ Field::Field(QWidget *parent) : QWidget(parent)
     currentx = currenty = -1;
 
     /// TEMP
-    setCellsMode = true;
-    FIELD[5][5] = 1;
-    FIELD[5][6] = 1;
-    FIELD[0][0] = 1;
+    setCellsModeFlag = true;
+    currentPosition = HORIZONTAL;
+//    FIELD[5][5] = 1;
+//    FIELD[5][6] = 1;
+//    FIELD[0][0] = 1;
+//    FIELD[1][5] = 2;
+//    FIELD[1][6] = 2;
+//    FIELD[2][5] = 3;
+//    FIELD[3][5] = 3;
+    countSL_1 = 0;
+    countSL_2 = 0;
+    countSL_3 = 0;
+    countSL_4 = 0;
+
 }
 
 void Field::paintEvent(QPaintEvent *event)
 {
     QPainter p(this);
     p.drawPixmap(zero_x, zero_y, x, y, *pm);
-
 }
 
 void Field::drawField()
@@ -63,41 +72,140 @@ void Field::drawField()
 
 void Field::mousePressEvent(QMouseEvent *event)
 {
+    if (setCellsModeFlag)
+    {
+        if (event->button() == Qt::LeftButton)
+        {
+            if (tmpStatusPressFlag)
+            {
+//                if (countSL_4 >= 0 && countSL_4 != 1)
+//                {
+//                    drawShip(c_x, c_y, SL_4, currentPosition);
+//                    countSL_4++;
+//                    return;
+//                }
+//                if (countSL_3 >= 0 && countSL_3 != 2)
+//                {
+//                    drawShip(c_x, c_y, SL_3, currentPosition);
+//                    countSL_3++;
+//                    return;
+//                }
+//                if (countSL_2 >= 0 && countSL_2 != 3)
+//                {
+//                    drawShip(c_x, c_y, SL_2, currentPosition);
+//                    countSL_2++;
+//                    return;
+//                }
+                if (countSL_1 >= 0 && countSL_1 != 4)
+                {
+                    drawShip(c_x, c_y, SL_1, currentPosition);
+                    countSL_1++;
+                    return;
+                }
+//                drawShip(c_x, c_y, SL_4, currentPosition);
 
+            }
+            else
+                QMessageBox::warning(this, "err", "Здесь нельзя ставить корабль");
+        }
+
+        if (event->button() == Qt::RightButton)
+            currentPosition = currentPosition == HORIZONTAL ? VERTICAL : HORIZONTAL;
+    }
+
+
+    // Небольшая недоработка: корабль меняет положение, но это будет видно, если переместить курсор
     emit sendMouseCoord(event->x(), event->y());
 }
 
 void Field::mouseMoveEvent(QMouseEvent *event)
 {
-
-    int c_x, c_y;
-
-
-    if ((event->x() > cell+zero_x) && (event->y() > cell+zero_y))
-    {
-
-        // находим индексы для массива
-        c_x = (event->x() - cell - zero_x) / cell + 1;
-        c_y = (event->y() - cell - zero_y) / cell + 1;
-        if ((c_x == currentx) && (c_y == currenty))
+        if ((event->x() > cell+zero_x) && (event->y() > cell+zero_y))
         {
 
+            // находим индексы для массива
+            c_x = (event->x() - cell - zero_x) / cell + 1;
+            c_y = (event->y() - cell - zero_y) / cell + 1;
+            if ((c_x == currentx) && (c_y == currenty))
+            {
+
+            }
+            else
+            {
+
+                if (setCellsModeFlag)
+                {
+                    clean();
+                    drawField();
+                    drawCellField();
+
+//                    if (countSL_4 >= 0 && countSL_4 != 1)
+//                    {
+//                        tmpStatusPressFlag = drawGhostCell(c_x, c_y, SL_4, currentPosition);
+//                        qDebug() << tmpStatusPressFlag;
+//                        return;
+//                    }
+//                    if (countSL_3 >= 0 && countSL_3 != 2)
+//                    {
+//                        tmpStatusPressFlag = drawGhostCell(c_x, c_y, SL_3, currentPosition);
+//                        qDebug() << tmpStatusPressFlag;
+//                        return;
+//                    }
+//                    if (countSL_2 >= 0 && countSL_2 != 3)
+//                    {
+//                        tmpStatusPressFlag = drawGhostCell(c_x, c_y, SL_2, currentPosition);
+//                        qDebug() << tmpStatusPressFlag;
+//                        return;
+//                    }
+                    if (countSL_1 >= 0 && countSL_1 != 4)
+                    {
+                        tmpStatusPressFlag = drawGhostCell(c_x, c_y, SL_1, currentPosition);
+                        qDebug() << tmpStatusPressFlag;
+                        return;
+                    }
+
+
+                }
+            }
         }
         else
         {
-            clean();
-            drawField();
-            drawCellField();
-            qDebug() << drawGhostCell(c_x, c_y, SL_4, VERTICAL);
+            c_x = -1;
+            c_y = -1;
         }
-    }
-    else
-    {
-        c_x = -1;
-        c_y = -1;
-    }
 
     update();
+}
+
+bool Field::checkNeightborhood(int cellx, int celly, SHIPS ship, POSITION pos)
+{
+    int i = celly - 1;
+    int j = cellx - 1;
+
+    qDebug() << i << " -- " << j;
+    if (ship == SL_1)
+    {
+        if (i == 0)
+            if ((FIELD[i][j+1] == 0) && (FIELD[i+1][j+1] == 0) && (FIELD[i+1][j] == 0) && (FIELD[i+1][j-1] == 0) && (FIELD[i][j-1] == 0))
+                return true;
+        if (j == 0)
+            if ((FIELD[i-1][j] == 0) && (FIELD[i+1][j-1] == 0) && (FIELD[i][j+1] == 0) && (FIELD[i+1][j+1] == 0) && (FIELD[i+1][j] == 0))
+                return true;
+        if (i == 0 && j == 0)
+            if ((FIELD[i][j+1] == 0) && (FIELD[i+1][j+1] == 0) && (FIELD[i+1][j] == 0))
+                return true;
+        if (i != 0 && j != 0)
+            if ()
+    }
+    if (pos == HORIZONTAL)
+    {
+
+    }
+    if (pos == VERTICAL)
+    {
+
+    }
+    return false;
 }
 
 bool Field::drawGhostCell(int cellx, int celly, SHIPS ship, POSITION pos, QColor color)
@@ -109,20 +217,24 @@ bool Field::drawGhostCell(int cellx, int celly, SHIPS ship, POSITION pos, QColor
     // Рисование клеток
     // Очень плохой код, очень. Серьёзно
     // Какой-то индусский код тут
-
-    // Тут даже однопалубный корабль бывает горизонтальным и вертикальным
-    // Это странно, но работает. Иначе бы пришлось это всё выносить. Мб позже и вынесу отдельно, если надо будет.
-    if (pos == HORIZONTAL)
+    if (ship == SL_1)
     {
-        if (ship == SL_1)
-        {
-            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
-            // И да, мы закидываем в метод drawGhostCell индексы клеток. т. е нумерация идет от 1 до 10.
-            // А вот для массива, как известно, идет нумерация с 0 до 9 и по этому надо
-            // минусовать единицу с проверки массива, ибо будет сдвиг (долго с этим возился)
+        p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+        // И да, мы закидываем в метод drawGhostCell индексы клеток. т. е нумерация идет от 1 до 10.
+        // А вот для массива, как известно, идет нумерация с 0 до 9 и по этому надо
+        // минусовать единицу с проверки массива, ибо будет сдвиг (долго с этим возился)
+        if (checkNeightborhood(cellx, celly, SL_1, HORIZONTAL))
             if ((FIELD[celly-1][cellx-1] != 0))
                 return false;
-        }
+            else
+                return true;
+        else
+            return false;
+    }
+
+    if (pos == HORIZONTAL)
+    {
+
         if (ship == SL_2)
         {
             p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
@@ -170,12 +282,6 @@ bool Field::drawGhostCell(int cellx, int celly, SHIPS ship, POSITION pos, QColor
     }
     if (pos == VERTICAL)
     {
-        if (ship == SL_1)
-        {
-            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
-            if ((FIELD[celly-1][cellx-1] != 0))
-                return false;
-        }
         if (ship == SL_2)
         {
             p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
@@ -217,6 +323,7 @@ bool Field::drawGhostCell(int cellx, int celly, SHIPS ship, POSITION pos, QColor
             return true;
         }
     }
+    return false;
 }
 
 void Field::drawOneCell(int cellx, int celly, CELLS cellType)
@@ -230,8 +337,19 @@ void Field::drawOneCell(int cellx, int celly, CELLS cellType)
         pn.setPen(QPen(Qt::black));
         pn.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
     }
-
-    /// TODO: Дописать условия для остальных типок клеток
+    if (cellType == CL_DOT)
+    {
+        pn.setBrush(QBrush(Qt::black));
+        pn.setPen(QPen(Qt::black));
+        // Немного костыльное решение
+        pn.drawArc(QRect(cellx*cell+cell-12, celly*cell+cell-12, 5, 5), 0, 36000);
+    }
+    if (cellType == CL_INJURED)
+    {
+        pn.setBrush(QBrush(QColor(255, 0, 0, 140)));  // м.б. позже убрать альфу
+        pn.setPen(QPen(QColor(255, 0, 0, 140)));
+        pn.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+    }
     update();
 }
 
@@ -242,21 +360,101 @@ void Field::drawCellField()
         for (int j = 0; j < 10; j++)
         {
             if (FIELD[j][i] == 1)
-                drawOneCell(i+1, j+1);
+                drawOneCell(i+1, j+1, CL_CELL);
+            if (FIELD[j][i] == 2)
+                drawOneCell(i+1, j+1, CL_DOT);
+            if (FIELD[j][i] == 3)
+                drawOneCell(i+1, j+1, CL_INJURED);
         }
     }
 
 }
 
+void Field::drawShip(int cellx, int celly, SHIPS ship, POSITION pos)
+{
+    QPainter p(pm);
+
+    p.setBrush(QBrush(Qt::black));
+    p.setPen(QPen(Qt::black));
+
+    if (ship == SL_1)
+    {
+        p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+        FIELD[celly-1][cellx-1] = 1;
+    }
+
+    if (pos == HORIZONTAL)
+    {
+
+        if (ship == SL_2)
+        {
+            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+cell+1, celly*cell+1, cell-2, cell-2));
+            FIELD[celly-1][cellx-1] = 1;
+            FIELD[celly-1][cellx] = 1;
+        }
+        if (ship == SL_3)
+        {
+            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+cell+cell+1, celly*cell+1, cell-2, cell-2));
+            FIELD[celly-1][cellx-1] = 1;
+            FIELD[celly-1][cellx] = 1;
+            FIELD[celly-1][cellx+1] = 1;
+        }
+        if (ship == SL_4)
+        {
+            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+cell+cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+cell+cell+cell+1, celly*cell+1, cell-2, cell-2));
+            FIELD[celly-1][cellx-1] = 1;
+            FIELD[celly-1][cellx] = 1;
+            FIELD[celly-1][cellx+1] = 1;
+            FIELD[celly-1][cellx+2] = 1;
+        }
+    }
+    if (pos == VERTICAL)
+    {
+        if (ship == SL_2)
+        {
+            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+1, celly*cell+cell+1, cell-2, cell-2));
+            FIELD[celly-1][cellx-1] = 1;
+            FIELD[celly][cellx-1] = 1;
+        }
+        if (ship == SL_3)
+        {
+            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+1, celly*cell+cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+1, celly*cell+cell+cell+1, cell-2, cell-2));
+            FIELD[celly-1][cellx-1] = 1;
+            FIELD[celly][cellx-1] = 1;
+            FIELD[celly+1][cellx-1] = 1;
+        }
+        if (ship == SL_4)
+        {
+            p.drawRect(QRect(cellx*cell+1, celly*cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+1, celly*cell+cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+1, celly*cell+cell+cell+1, cell-2, cell-2));
+            p.drawRect(QRect(cellx*cell+1, celly*cell+cell+cell+cell+1, cell-2, cell-2));
+            FIELD[celly-1][cellx-1] = 1;
+            FIELD[celly][cellx-1] = 1;
+            FIELD[celly+1][cellx-1] = 1;
+            FIELD[celly+2][cellx-1] = 1;
+        }
+    }
+    update();
+}
+
+
 // Скорее всего этот метод я удалю. Не нужен он. Рисовкой будет заниматься отдельный метод,
 // который будет ставить корабли целиком, а не по одному.
-
 /// TODO: Удалить метод. Создать метод для рисовки целого корабля, а не поклеточно
-void Field::drawCell(int x, int y/*, CELLS cellType = CL_CELL*/, CELLS cellType)
+void Field::drawCelltmp(int x, int y/*, CELLS cellType = CL_CELL*/, CELLS cellType)
 {
     // индексы для массива клеток
     // ВНИМАНИЕ, их надо в индексах будет поменять местами
-    int c_x, c_y;
     QPainter pntr(pm);
 
     if ((x > cell+zero_x) && (y > cell+zero_y))
@@ -324,9 +522,9 @@ void Field::drawCell(int x, int y/*, CELLS cellType = CL_CELL*/, CELLS cellType)
     update();
 }
 
-void Field::clean()
+void Field::clean(QColor color)
 {
-    pm->fill();
+    pm->fill(color);
 }
 
 void Field::setName(const QString &name)

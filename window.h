@@ -35,6 +35,7 @@ private slots:
     void getMouseCoord(int x, int y);
     void setMyCountOfCells(int myCountCells);
     void setEnemyCountOfCells(int enemyCountCells);
+    void doneMy();
 };
 
 #endif // WINDOW_H

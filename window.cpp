@@ -40,6 +40,8 @@ Window::Window(QWidget *parent) : QWidget(parent)
 
     connect(debEn, SIGNAL(clicked(bool)), Enemy, SLOT(getField()));
     connect(debMy, SIGNAL(clicked(bool)), My, SLOT(getField()));
+
+    connect(My, SIGNAL(done()), this, SLOT(doneMy()));
 }
 
 void Window::getMouseCoord(int x, int y)
@@ -63,4 +65,9 @@ void Window::setEnemyCountOfCells(int enemyCountCells)
         lblEnemyCount->setEnabled(true);
     else
         lblEnemyCount->setEnabled(false);
+}
+
+void Window::doneMy()
+{
+    QMessageBox::information(this, "info", "ssss");
 }
