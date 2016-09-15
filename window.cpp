@@ -32,21 +32,21 @@ Window::Window(QWidget *parent) : QWidget(parent)
     this->setMinimumSize(QSize(510, 300));
 
     // TODO: Сделать, чтобы в выводе писало с какого поля был клик
-    connect(My, SIGNAL(sendMouseCoord(int,int)), this, SLOT(getMouseCoord(int,int)));
-    connect(Enemy, SIGNAL(sendMouseCoord(int,int)), this, SLOT(getMouseCoord(int,int)));
+    connect(My, SIGNAL(sendMouseCoord(int,int,int,int)), this, SLOT(getMouseCoord(int,int,int,int)));
+    connect(Enemy, SIGNAL(sendMouseCoord(int,int,int,int)), this, SLOT(getMouseCoord(int,int,int,int)));
+
     connect(My, SIGNAL(sendCountCells(int)), this, SLOT(setMyCountOfCells(int)));
     connect(Enemy, SIGNAL(sendCountCells(int)), this, SLOT(setEnemyCountOfCells(int)));
-    // отключение редактирования
 
-    connect(debEn, SIGNAL(clicked(bool)), Enemy, SLOT(getField()));
-    connect(debMy, SIGNAL(clicked(bool)), My, SLOT(getField()));
+    connect(debEn, SIGNAL(clicked(bool)), Enemy, SLOT(DEBUGgetField()));
+    connect(debMy, SIGNAL(clicked(bool)), My, SLOT(DEBUGgetField()));
 
     connect(My, SIGNAL(done()), this, SLOT(doneMy()));
 }
 
-void Window::getMouseCoord(int x, int y)
+void Window::getMouseCoord(int x, int y, int indI, int indJ)
 {
-    qDebug() << QString("X: %1; Y: %2").arg(QString::number(x)).arg(QString::number(y));
+    qDebug() << QString("X: %1; Y: %2 [%3 %4]").arg(QString::number(x)).arg(QString::number(y)).arg(QString::number(indI)).arg(QString::number(indJ));
 }
 
 void Window::setMyCountOfCells(int myCountCells)

@@ -32,7 +32,7 @@ signals:
 
 public slots:
 private slots:
-    void getMouseCoord(int x, int y);
+    void getMouseCoord(int x, int y, int indI, int indJ);
     void setMyCountOfCells(int myCountCells);
     void setEnemyCountOfCells(int enemyCountCells);
     void doneMy();
