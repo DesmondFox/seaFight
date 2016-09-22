@@ -53,14 +53,11 @@ protected:
     virtual void drawOneCell(int cellx, int celly, CELLS cellType = CL_CELL);  //Нарисовать одну клетку
 
 
-    bool checkNeightbourhood(int cellx, int celly, SHIPS ship, POSITION pos);  // метод для проверки корабля на "ближайших соседей"
-    /// Функции для дебага
+       /// Функции для дебага
     QString debugGetField();   // вывод значений поля
 
 signals:
     void sendMouseCoord(int x, int y, int indI, int indJ);
-    void sendCountCells(int countCells);    // сигнал, передающий колличество расставленных клеток на поле
-    void done(); // сигнализируем о том, что у нас клетки уже расставлены
 
 public slots:
     void DEBUGgetField();

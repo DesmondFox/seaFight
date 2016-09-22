@@ -90,35 +90,7 @@ void Field::mouseMoveEvent(QMouseEvent *event)
     update();
 }
 
-bool Field::checkNeightbourhood(int cellx, int celly, SHIPS ship, POSITION pos)
-{
-    int i = celly - 1;
-    int j = cellx - 1;
 
-    qDebug() << i << " -- " << j;
-    if (ship == SL_1)
-    {
-        if (i == 0)
-            if ((FIELD[i][j+1] == 0) && (FIELD[i+1][j+1] == 0) && (FIELD[i+1][j] == 0) && (FIELD[i+1][j-1] == 0) && (FIELD[i][j-1] == 0))
-                return true;
-        if (j == 0)
-            if ((FIELD[i-1][j] == 0) && (FIELD[i+1][j-1] == 0) && (FIELD[i][j+1] == 0) && (FIELD[i+1][j+1] == 0) && (FIELD[i+1][j] == 0))
-                return true;
-        if (i == 0 && j == 0)
-            if ((FIELD[i][j+1] == 0) && (FIELD[i+1][j+1] == 0) && (FIELD[i+1][j] == 0))
-                return true;
-
-    }
-    if (pos == HORIZONTAL)
-    {
-
-    }
-    if (pos == VERTICAL)
-    {
-
-    }
-    return false;
-}
 
 bool Field::drawGhostCell(int cellx, int celly, SHIPS ship, POSITION pos, QColor color)
 {
@@ -135,13 +107,13 @@ bool Field::drawGhostCell(int cellx, int celly, SHIPS ship, POSITION pos, QColor
         // И да, мы закидываем в метод drawGhostCell индексы клеток. т. е нумерация идет от 1 до 10.
         // А вот для массива, как известно, идет нумерация с 0 до 9 и по этому надо
         // минусовать единицу с проверки массива, ибо будет сдвиг (долго с этим возился)
-        if (checkNeightbourhood(cellx, celly, SL_1, HORIZONTAL))
-            if ((FIELD[celly-1][cellx-1] != 0))
-                return false;
-            else
-                return true;
-        else
-            return false;
+//        if (checkNeightbourhood(cellx, celly, SL_1, HORIZONTAL))
+//            if ((FIELD[celly-1][cellx-1] != 0))
+//                return false;
+//            else
+//                return true;
+//        else
+//            return false;
     }
 
     if (pos == HORIZONTAL)
