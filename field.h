@@ -10,7 +10,11 @@
 #include "ship.h"
 
 enum POSITION {HORIZONTAL = 0, VERTICAL};
-
+struct Indexes
+{
+    int i;
+    int j;
+};
 
 class Field : public QWidget
 {
@@ -38,9 +42,11 @@ protected:
 
     int currentx;
     int currenty;
+    int age;    // состояние постройки кораблей
 
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
+
 
     virtual void drawField();
 

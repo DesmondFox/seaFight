@@ -16,6 +16,8 @@ Field::Field(QWidget *parent) : QWidget(parent)
     currentx = currenty = -1;
     setCellsModeFlag = true;
 
+    /// temp
+    age = 0;
 }
 
 void Field::paintEvent(QPaintEvent *event)
