@@ -7,9 +7,8 @@
 #include <QMouseEvent>
 #include <QMessageBox>
 #include <QDebug>
+#include "ship.h"
 
-enum CELLS {CL_EMPTY = 0, CL_CELL, CL_DOT, CL_INJURED};
-enum SHIPS {SL_1 = 1, SL_2, SL_3, SL_4};
 enum POSITION {HORIZONTAL = 0, VERTICAL};
 
 
@@ -23,11 +22,8 @@ protected:
     QPixmap *pm;
 
     bool setCellsModeFlag;  // флаг, показывающий, что мы в режиме расстановки кораблей
-    bool tmpStatusPressFlag; // Флаг, указывающий, можно ли ставить корабль в том месте
 
     POSITION currentPosition; // В какмо положении сейчас указатель (вертикальное/горизонтальное)
-
-    QString playerName;
     int x;  // ширина поля
     int y;  // высота поля
 
@@ -47,11 +43,6 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
 
     virtual void drawField();
-    virtual bool drawGhostCell(int cellx, int celly, SHIPS ship, POSITION pos = HORIZONTAL, QColor color = QColor(186, 186, 186, 150));
-    virtual void drawCellField();
-    virtual void drawShip(int cellx, int celly, SHIPS ship, POSITION pos);
-    virtual void drawOneCell(int cellx, int celly, CELLS cellType = CL_CELL);  //Нарисовать одну клетку
-
 
        /// Функции для дебага
     QString debugGetField();   // вывод значений поля

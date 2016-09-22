@@ -10,6 +10,5 @@ EnemyField::EnemyField(int hX, int hY)
     zero_y = hY / 11;
     clean();
     drawField();
-    playerName = "Игрок 2";
     setCellsModeFlag = false;
 }

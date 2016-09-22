@@ -23,7 +23,7 @@ Window::Window(QWidget *parent) : QWidget(parent)
     this->setLayout(lay);
     this->resize(QSize(510, 320));
     this->setMinimumSize(QSize(510, 300));
-    // тест
+
     // TODO: Сделать, чтобы в выводе писало с какого поля был клик
     connect(My, SIGNAL(sendMouseCoord(int,int,int,int)), this, SLOT(getMouseCoord(int,int,int,int)));
     connect(Enemy, SIGNAL(sendMouseCoord(int,int,int,int)), this, SLOT(getMouseCoord(int,int,int,int)));

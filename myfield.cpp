@@ -10,7 +10,6 @@ MyField::MyField(int hX, int hY)
     pm->fill();
 //    editingMode = true;
     drawField();
-    playerName = "Игрок 1";
 
 }
 
