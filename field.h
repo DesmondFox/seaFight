@@ -9,7 +9,6 @@
 #include <QDebug>
 #include "ship.h"
 
-enum POSITION {HORIZONTAL = 0, VERTICAL};
 struct Indexes
 {
     int i;
@@ -26,20 +25,23 @@ protected:
     QPixmap *pm;
 
     bool setCellsModeFlag;  // флаг, показывающий, что мы в режиме расстановки кораблей
+    bool tmpStatusToPress;
 
-    POSITION currentPosition; // В какмо положении сейчас указатель (вертикальное/горизонтальное)
-    int x;  // ширина поля
-    int y;  // высота поля
+
+    position currentPosition; // В каком положении сейчас указатель (вертикальное/горизонтальное)
+
+    int width;  // ширина поля
+    int height;  // высота поля
 
     int zero_x; //  НУЛЕВЫЕ ТОЧКИ,
     int zero_y; //  с которых идет рисование поля
     int cellSize;   //  размер(сторона) одной клетки
 
     int FIELD[10][10]; // собственно, поле
+    QVector<Ship> ships;
 
-    int c_x;    // клетки
-    int c_y;    // т.е. индексы для массива+1
-
+    int c_x;
+    int c_y;
     int currentx;
     int currenty;
     int age;    // состояние постройки кораблей
@@ -47,11 +49,13 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 
-
+    virtual bool drawGhostCell(const Ship &sh, QColor color = QColor(0, 120, 0, 100));
+    virtual void drawShip(const Ship &sh, QColor color = QColor(225, 225, 225));
     virtual void drawField();
 
        /// Функции для дебага
     QString debugGetField();   // вывод значений поля
+    void drawFieldCells();
 
 signals:
     void sendMouseCoord(int x, int y, int indI, int indJ);

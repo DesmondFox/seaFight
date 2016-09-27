@@ -17,13 +17,15 @@ SOURCES += main.cpp\
     myfield.cpp \
     enemyfield.cpp \
     window.cpp \
-    ship.cpp
+    ship.cpp \
+    indexesandstatus.cpp
 
 HEADERS  += \
     field.h \
     myfield.h \
     enemyfield.h \
     window.h \
-    ship.h
+    ship.h \
+    indexesandstatus.h
 
 FORMS    +=
