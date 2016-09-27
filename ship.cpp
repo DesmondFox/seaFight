@@ -7,5 +7,13 @@ Ship::Ship()
 
 Ship::Ship(int i, int j, int decks, position pos)
 {
-    // TODO: Доделать этот конструктор, чтобы он мог записать сразу всё о корабле, если это понадобится
+    shipCell.clear();
+    if (pos == horizontal)
+        for (int n = 0; n < decks; n++)
+            shipCell.append(IndexesAndStatus(i, j+n, st_alive));
+    if (pos == vertical)
+        for (int n = 0; n < decks; n++)
+            shipCell.append(IndexesAndStatus(i+n, j, st_alive));
+    numberOfDecks = decks;
+    positionOfShip = pos;
 }

@@ -1,16 +1,8 @@
 #ifndef SHIP_H
 #define SHIP_H
 #include <QVector>
+#include "indexesandstatus.h"
 
-enum statusOfShip {st_alive = 1, st_injured};
-enum position {horizontal = 0, vertical};
-
-struct IndexesAndStatus
-{
-    int i;
-    int j;
-    statusOfShip status;
-};
 
 class Ship
 {
