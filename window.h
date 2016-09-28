@@ -10,23 +10,22 @@
 #include <QLabel>
 #include <QDebug>
 
+#include "field.h"
 #include "myfield.h"
-#include "enemyfield.h"
-
+//#include "enemyfield.h"
 class Window : public QWidget
 {
     Q_OBJECT
 public:
     explicit Window(QWidget *parent = 0);
     MyField *My;
-    EnemyField *Enemy;
+    MyField *Enemy;
     QPushButton *debMy;
     QPushButton *debEn;
 
 public slots:
 private slots:
     void getMouseCoord(int x, int y, int indI, int indJ);
-    void doneMy();
 };
 
 #endif // WINDOW_H

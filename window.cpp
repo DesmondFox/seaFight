@@ -3,8 +3,7 @@
 Window::Window(QWidget *parent) : QWidget(parent)
 {
     My = new MyField(220, 220);
-    Enemy = new EnemyField(220, 220);
-
+    Enemy = new MyField(220, 220);
     debEn = new QPushButton("Enemy", this);
     debMy = new QPushButton("My", this);
 
@@ -38,7 +37,3 @@ void Window::getMouseCoord(int x, int y, int indI, int indJ)
     qDebug() << QString("X: %1; Y: %2 [%3 %4]").arg(QString::number(x)).arg(QString::number(y)).arg(QString::number(indI)).arg(QString::number(indJ));
 }
 
-void Window::doneMy()
-{
-    QMessageBox::information(this, "info", "ssss");
-}

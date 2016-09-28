@@ -24,6 +24,35 @@ Field::Field(QWidget *parent) : QWidget(parent)
     currentPosition = horizontal;
 }
 
+Field::Field(int widthOfField, int heightOfField)
+{
+    pm = new QPixmap(heightOfField, widthOfField);
+    width = widthOfField;
+    height = heightOfField;
+    zero_x = widthOfField / 11;
+    zero_y = heightOfField / 11;
+    pm->fill();
+
+    // очищаем массив клеток на всякий случай
+    for (int i = 0; i < 10; i++)
+        for (int j = 0; j < 10; j++)
+            FIELD[i][j] = 0;
+
+//    currentx = currenty = -1;
+    setCellsModeFlag = true;
+
+    /// temp
+    age = 0;
+    FIELD[5][4] = 1;
+//    drawFieldCells();
+//    tmpStatusToPress = false;
+    currentPosition = horizontal;
+
+    drawField();
+    drawFieldCells();
+    update();
+}
+
 void Field::paintEvent(QPaintEvent *event)
 {
     QPainter p(this);
@@ -71,11 +100,12 @@ void Field::mousePressEvent(QMouseEvent *event)
                 currenty = (event->x() - cellSize - zero_x) / cellSize + 1;
                 currentx = (event->y() - cellSize - zero_y) / cellSize + 1;
 
-                Ship s(currentx, currenty, 2, currentPosition);
+                Ship s(currentx, currenty, 4, currentPosition);
                 if (tmpStatusToPress)
                 {
                     drawShip(s);
                     ships.append(s);
+                    tmpStatusToPress = false;
                 }
 
 
@@ -96,6 +126,7 @@ void Field::mousePressEvent(QMouseEvent *event)
 
 void Field::mouseMoveEvent(QMouseEvent *event)
 {
+    update();
     // TODO: Уменьшить нагрузку. Сделать, чтобы проверка была на каждой клетке, а не пикселе
     if ((event->x() > cellSize+zero_x) && (event->y() > cellSize+zero_y))
     {
@@ -107,7 +138,7 @@ void Field::mouseMoveEvent(QMouseEvent *event)
             clean();
             drawField();
 
-            Ship s(c_y, c_x, 2, currentPosition);
+            Ship s(c_y, c_x, 4, currentPosition);
             tmpStatusToPress = drawGhostCell(s, tmpStatusToPress ? QColor(0, 150, 0, 100) : QColor(150, 0, 0, 100));
             qDebug() << "Status: " << tmpStatusToPress << " " << c_x << " - " << c_y;
 
@@ -134,35 +165,37 @@ void Field::drawShip(const Ship &sh, QColor color)
     p.setBrush(QBrush(color));
     for (int i = 0; i < sh.numberOfDecks; i++)
         p.drawRect(QRect(sh.shipCell[i].j*cellSize+1, sh.shipCell[i].i*cellSize+1, cellSize-2, cellSize-2));
-    for (int i = 0; i < sh.numberOfDecks; i++)
-    {
-        FIELD[sh.shipCell[i].i-1][sh.shipCell[i].j-1] = 1;
-    }
 
+    for (int i = 0; i < sh.numberOfDecks; i++)
+        FIELD[sh.shipCell[i].i-1][sh.shipCell[i].j-1] = 1;
+
+    // Получаем индексы противоположных концов корабля
     int tmpi_min = sh.shipCell[0].i-1;
     int tmpj_min = sh.shipCell[0].j-1;
     int tmpi_max = sh.shipCell[sh.shipCell.length()-1].i - 1;
     int tmpj_max = sh.shipCell[sh.shipCell.length()-1].j - 1;
 
     qDebug() << tmpi_min << tmpi_max << tmpj_min << tmpj_max;
+
+    // Заполнение соседних клеток пятерками по вертикали
     for (int i = tmpi_min - 1; i <= tmpi_max+1; i++)
     {
         if (tmpj_min - 1 >= 0 && i >= 0)
             FIELD[i][tmpj_min-1] = 5;
         if (tmpj_max < 9 && i >= 0 && i < 10)
             FIELD[i][tmpj_max+1] = 5;
-
     }
 
-
-
-    if (sh.positionOfShip == horizontal)
+    // Заполнение соседних клеток по горизонтали
+    for (int i = tmpj_min - 1; i <= tmpj_max + 1; i++)
     {
+        if (tmpi_min - 1 >= 0 && i >= 0 && i < 10)
+            FIELD[tmpi_min-1][i] = 5;
 
+        if (tmpi_max < 9 && i >= 0 && i < 10)
+            FIELD[tmpi_max+1][i] = 5;
     }
-
-
-
+    update();
 }
 
 bool Field::drawGhostCell(const Ship &sh, QColor color)
@@ -195,6 +228,7 @@ bool Field::drawGhostCell(const Ship &sh, QColor color)
     return true;
 }
 
+// Временный класс. Дальше будет класс по рисовке самих кораблей с вектора
 void Field::drawFieldCells()
 {
     QPainter pn(pm);

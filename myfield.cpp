@@ -1,6 +1,6 @@
 #include "myfield.h"
 
-MyField::MyField(int hX, int hY)
+MyField::MyField(int hX, int hY)//    :   Field(hX, hY)
 {
     pm = new QPixmap(hX, hY);
     width = hX;
@@ -13,8 +13,4 @@ MyField::MyField(int hX, int hY)
     drawFieldCells();
 }
 
-//void MyField::startEditing()
-//{
-//    QMessageBox::information(this, "Расстановка", QString("Сначала %1 расставляет свои корабли").arg(playerName));
-//}
 

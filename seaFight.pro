@@ -15,7 +15,6 @@ TEMPLATE = app
 SOURCES += main.cpp\
     field.cpp \
     myfield.cpp \
-    enemyfield.cpp \
     window.cpp \
     ship.cpp \
     indexesandstatus.cpp
@@ -23,7 +22,6 @@ SOURCES += main.cpp\
 HEADERS  += \
     field.h \
     myfield.h \
-    enemyfield.h \
     window.h \
     ship.h \
     indexesandstatus.h

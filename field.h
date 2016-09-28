@@ -20,6 +20,7 @@ class Field : public QWidget
     Q_OBJECT
 public:
     explicit Field(QWidget *parent = 0);
+    explicit Field(int widthOfField, int heightOfField);
 protected:
     virtual void paintEvent(QPaintEvent *event);
     QPixmap *pm;
