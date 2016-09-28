@@ -12,6 +12,11 @@ public:
     QVector<IndexesAndStatus> shipCell; // Это вектор, хранящий координаты каждой клетки корабля и состояние каждой из них
     int numberOfDecks;  // Количество палуб у корабля (менее 4, но более 1)
     position positionOfShip;    // Вертикально или горизонтально корабль стоит
+
+    void setData(int i, int j, int decks, position pos);
+
+private:
+    void clear();
 };
 
 #endif // SHIP_H
