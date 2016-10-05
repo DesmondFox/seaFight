@@ -2,30 +2,26 @@
 #define WINDOW_H
 
 #include <QWidget>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QGridLayout>
-#include <QGroupBox>
 #include <QPushButton>
 #include <QLabel>
-#include <QDebug>
-
+//#include <Q
 #include "field.h"
-#include "myfield.h"
-//#include "enemyfield.h"
-class Window : public QWidget
+
+class window    : public QWidget
 {
-    Q_OBJECT
 public:
-    explicit Window(QWidget *parent = 0);
-    MyField *My;
-    MyField *Enemy;
-    QPushButton *debMy;
-    QPushButton *debEn;
+    window(QWidget *parent = 0);
+    Field *field1;
+    Field *field2;
+    QGridLayout *lay;
+    QPushButton *btnDebug;
+
+    QLabel *playerName1;
+    QLabel *playerName2;
 
 public slots:
-private slots:
-    void getMouseCoord(int x, int y, int indI, int indJ);
+    void setPlayerNames(const QString &name1, const QString &name2);
 };
 
 #endif // WINDOW_H

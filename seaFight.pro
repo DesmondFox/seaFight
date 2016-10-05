@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2016-09-01T18:12:51
+# Project created by QtCreator 2016-09-30T12:04:28
 #
 #-------------------------------------------------
 
@@ -12,18 +12,22 @@ TARGET = seaFight
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-    field.cpp \
-    myfield.cpp \
+SOURCES += main.cpp \
     window.cpp \
+    fieldclass.cpp \
+    field.cpp \
     ship.cpp \
-    indexesandstatus.cpp
+    indexesandstatus.cpp \
+    startdialog.cpp \
+    aboutdialog.cpp
 
 HEADERS  += \
-    field.h \
-    myfield.h \
     window.h \
+    fieldclass.h \
+    field.h \
     ship.h \
-    indexesandstatus.h
+    indexesandstatus.h \
+    startdialog.h \
+    aboutdialog.h
 
 FORMS    +=

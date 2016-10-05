@@ -1,39 +1,44 @@
 #include "window.h"
 
-Window::Window(QWidget *parent) : QWidget(parent)
+window::window(QWidget *parent)     : QWidget(parent)
 {
-    My = new MyField(220, 220);
-    Enemy = new MyField(220, 220);
-    debEn = new QPushButton("Enemy", this);
-    debMy = new QPushButton("My", this);
+    field1 = new Field(this);
+    field2 = new Field(this);
+
+    playerName1 = new QLabel("<font color=blue>Player 1</font>", this);
+    playerName2 = new QLabel("<font color=purple>Player 2</font>", this);
 
 
-    QVBoxLayout *leftField = new QVBoxLayout();
-    leftField->addWidget(My);
-    leftField->addWidget(debMy);
-    QVBoxLayout *rightField = new QVBoxLayout();
-    rightField->addWidget(Enemy);
-    rightField->addWidget(debEn);
+    lay = new QGridLayout(this);
+    lay->addWidget(playerName1, 0, 0, Qt::AlignCenter | Qt::AlignBottom);
+    lay->addWidget(playerName2, 0, 1, Qt::AlignCenter | Qt::AlignBottom);
+    lay->addWidget(field1, 1, 0, Qt::AlignLeft  | Qt::AlignTop);
+    lay->addWidget(field2, 1, 1, Qt::AlignRight | Qt::AlignTop);
 
-    QGridLayout *lay = new QGridLayout(this);
-    lay->addLayout(leftField, 0, 0);
-    lay->addLayout(rightField, 0, 1);
+    this->resize(475, 300);
 
-    this->setLayout(lay);
-    this->resize(QSize(510, 320));
-    this->setMinimumSize(QSize(510, 300));
+    btnDebug = new QPushButton("View", this);
+    lay->addWidget(btnDebug, 2, 0);
 
-    // TODO: Сделать, чтобы в выводе писало с какого поля был клик
-    connect(My, SIGNAL(sendMouseCoord(int,int,int,int)), this, SLOT(getMouseCoord(int,int,int,int)));
-    connect(Enemy, SIGNAL(sendMouseCoord(int,int,int,int)), this, SLOT(getMouseCoord(int,int,int,int)));
+    setLayout(lay);
+    setWindowTitle("Морской бой 0.1-rc1");
 
-    connect(debEn, SIGNAL(clicked(bool)), Enemy, SLOT(DEBUGgetField()));
-    connect(debMy, SIGNAL(clicked(bool)), My, SLOT(DEBUGgetField()));
-
+    connect(btnDebug, SIGNAL(clicked(bool)), field1, SLOT(DEBUGGetField()));
 }
 
-void Window::getMouseCoord(int x, int y, int indI, int indJ)
+void window::setPlayerNames(const QString &name1, const QString &name2)
 {
-    qDebug() << QString("X: %1; Y: %2 [%3 %4]").arg(QString::number(x)).arg(QString::number(y)).arg(QString::number(indI)).arg(QString::number(indJ));
-}
+    if (!name1.isEmpty())
+    {
+        playerName1->setText("<font color=blue>"+name1+"</font>");
+    }
+    else
+        playerName1->setText("<font color=blue>Player 1</font>");
 
+    if (!name2.isEmpty())
+    {
+        playerName2->setText("<font color=blue>"+name2+"</font>");
+    }
+    else
+        playerName2->setText("<font color=blue>Player 2</font>");
+}

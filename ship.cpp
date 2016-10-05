@@ -36,4 +36,5 @@ void Ship::setData(int i, int j, int decks, position pos)
             shipCell.append(IndexesAndStatus(i+n, j, st_alive));
     numberOfDecks = decks;
     positionOfShip = pos;
+
 }
