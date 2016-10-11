@@ -25,7 +25,7 @@ FieldClass::FieldClass(QWidget *parent)   : QGraphicsView(parent)
 //    connect(timer, SIGNAL(timeout()), this, SLOT(drawField()));
 //    timer->start(1000);
 
-    drawField();
+//    drawField();
 
 
 }

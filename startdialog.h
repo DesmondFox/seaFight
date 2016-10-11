@@ -36,6 +36,7 @@ private:
     QPushButton *btnAbout;
     AboutDialog dlgAbout;
 
+
     int mode;   // 1 - Сингплеер, 2 - Два игрока
 public slots:
     void slotExit();

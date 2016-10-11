@@ -19,7 +19,10 @@ SOURCES += main.cpp \
     ship.cpp \
     indexesandstatus.cpp \
     startdialog.cpp \
-    aboutdialog.cpp
+    aboutdialog.cpp \
+    process.cpp \
+    kicks.cpp \
+    ai.cpp
 
 HEADERS  += \
     window.h \
@@ -28,6 +31,9 @@ HEADERS  += \
     ship.h \
     indexesandstatus.h \
     startdialog.h \
-    aboutdialog.h
+    aboutdialog.h \
+    process.h \
+    kicks.h \
+    ai.h
 
 FORMS    +=

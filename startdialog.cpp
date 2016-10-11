@@ -55,6 +55,7 @@ void StartDialog::slotExit()
 {
     // TODO: Реализовать выход из приложения по другому, ибо не канон
 //    std::exit(0);
+//    QApplication::exit(0);
 }
 
 void StartDialog::slotSingle()
@@ -75,7 +76,9 @@ void StartDialog::slotMulti()
 
 void StartDialog::slotStart()
 {
-    emit signalSendPlayerNamesAndStart(edName1->text(), edName2->text(), mode);
+    QString name1 = edName1->text();
+    QString name2 = edName2->text();
+    emit signalSendPlayerNamesAndStart(name1, name2, mode);
     this->accept();
 }
 
