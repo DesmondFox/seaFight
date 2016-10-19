@@ -10,8 +10,13 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QApplication>
+#include <QCloseEvent>
+#include <QCheckBox>
 
-#include "aboutdialog.h"
+//#include "aboutdialog.h"
+#include "about.h"
+#include "stat.h"
+
 
 class StartDialog : public QDialog
 {
@@ -21,6 +26,7 @@ public:
     StartDialog(QWidget *parent = 0);
 
 private:
+    void closeEvent(QCloseEvent *event);
     QGridLayout *lay;
     QLabel *lblWelcome;
     QRadioButton *checkSinglePlayer;
@@ -34,7 +40,8 @@ private:
     QPushButton *btnStart;
     QPushButton *btnExit;
     QPushButton *btnAbout;
-    AboutDialog dlgAbout;
+    QCheckBox *cbTipsMode;
+//    AboutDialog dlgAbout;
 
 
     int mode;   // 1 - Сингплеер, 2 - Два игрока
@@ -46,7 +53,7 @@ public slots:
     void slotAbout();
 
 signals:
-    void signalSendPlayerNamesAndStart(const QString &name_1, const QString &name_2, int modeOfGame);
+    void signalSendPlayerNamesAndStart(const QString &name_1, const QString &name_2, int modeOfGame, bool tips);
 };
 
 #endif // STARTDIALOG_H

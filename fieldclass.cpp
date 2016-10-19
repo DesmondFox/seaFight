@@ -9,7 +9,7 @@ FieldClass::FieldClass(QWidget *parent)   : QGraphicsView(parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     resize(220, 220);
-//    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     this->setScene(scene);
     scene->addItem(groupField);
@@ -21,11 +21,6 @@ FieldClass::FieldClass(QWidget *parent)   : QGraphicsView(parent)
     /// tmp
     cellSize = 20;
     zero_x = zero_y = 20;
-
-//    connect(timer, SIGNAL(timeout()), this, SLOT(drawField()));
-//    timer->start(1000);
-
-//    drawField();
 
 
 }

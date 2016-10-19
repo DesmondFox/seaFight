@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/sounds">
+        <file>no_battle.wav</file>
+    </qresource>
+    <qresource prefix="/icon">
+        <file>icon/ocean-transportation.png</file>
+    </qresource>
+</RCC>

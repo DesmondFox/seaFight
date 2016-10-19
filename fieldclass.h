@@ -10,7 +10,6 @@
 #include <QTimer>
 #include <QMouseEvent>
 
-
 class FieldClass : public QGraphicsView
 {
     Q_OBJECT
