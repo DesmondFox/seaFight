@@ -14,6 +14,8 @@ window::window(QWidget *parent)     : QMainWindow(parent)
     game->addAction(endGame);
 
     QAction *statist = new QAction("Статистика");
+    statist->setShortcut(QKeySequence("Alt+F1"));
+    statist->setIcon(QIcon(":/icon/icon/ocean-transportation.png"));
     QAction *abt = new QAction("Об игре");
 
     other->addAction(statist);

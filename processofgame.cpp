@@ -16,7 +16,6 @@ Process::Process(QWidget *parent)   : window(parent)
                     // 2 - ход второго игрока
 
 
-
     connect(done1, SIGNAL(clicked(bool)), this, SLOT(player1_isDone()));
     connect(done2, SIGNAL(clicked(bool)), this, SLOT(player2_isDone()));
 

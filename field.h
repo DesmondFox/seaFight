@@ -32,7 +32,7 @@ protected:
 
     bool drawGhostShip(const Ship &sh, QColor color, bool show = true);
     void drawShip(const Ship &sh, QColor color = QColor(255, 255, 255));
-    void drawSimpleShip(const Ship &sh);
+//    void drawSimpleShip(const Ship &sh);
     void drawOneCell(indexes ind);
     void drawMissCell(indexes ind);
     void drawInjCell(indexes ind, QColor color = QColor(255, 0, 50));

@@ -103,26 +103,7 @@ void Field::drawTip(const Ship &sh)
 
 }
 
-void Field::drawSimpleShip(const Ship &sh)
-{
-    //
-    // метод для рисовки одного корабля на поле
-    //
 
-    QPen penShip(QColor(0, 0, 0));
-    QPen penInjured(QColor(255, 0, 0));
-    QBrush fillBrush(Qt::black, Qt::SolidPattern);
-    QBrush injBrush(Qt::red, Qt::SolidPattern);
-
-
-    for (int i = 0; i < sh.numberOfDecks; i++)
-        if (sh.shipCell[i].stt == st_alive)
-            groupShips->addToGroup(scene->addRect(QRectF(sh.shipCell[i].j*cellSize+1, sh.shipCell[i].i*cellSize+1, cellSize-2, cellSize-2), penShip, fillBrush));
-        else
-            groupShips->addToGroup(scene->addRect(QRectF(sh.shipCell[i].j*cellSize+1, sh.shipCell[i].i*cellSize+1, cellSize-2, cellSize-2), penInjured, injBrush));
-
-
-}
 
 void Field::drawMissCell(indexes ind)
 {
@@ -413,7 +394,8 @@ void Field::mousePressEvent(QMouseEvent *event)
             if (!(setShipFlag || battleMode))
                 emit notBattleMode();
 
-            checkShips();
+            if (setShipFlag)
+                checkShips();
             if (battleMode)
             {
                 indexes ind;
@@ -427,8 +409,8 @@ void Field::mousePressEvent(QMouseEvent *event)
 
 void Field::checkShips()
 {
-    if (age <= 9)
-    {
+//    if (age <= 9)
+//    {
         int decks;
 
         if (age == 0)               decks = 4;
@@ -448,7 +430,7 @@ void Field::checkShips()
                 emit done();
             }
         }
-    }
+//    }
 }
 
 void Field::clearAll()
